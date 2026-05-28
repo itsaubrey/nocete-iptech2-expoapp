@@ -1,32 +1,51 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { supabase } from "../../lib/supabase";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 type Props = {
-  onAdd: (text: string) => void;
+  onAdd: (title: string, description: string) => void;
 };
 
-export default function Form({ onAdd }: Props) {
-  const [text, setText] = useState("");
+export default function EntryForm({ onAdd }: Props) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleAdd = () => {
-    if (!text.trim()) return;
+    if (!title.trim() || !description.trim()) {
+      Alert.alert("Missing input", "Please fill in all fields.");
+      return;
+    }
 
-    onAdd(text);
-    setText("");
+    onAdd(title.trim(), description.trim());
+    setTitle("");
+    setDescription("");
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
         placeholder="What did you learn today?"
-        value={text}
-        onChangeText={setText}
+        value={title}
+        onChangeText={setTitle}
+        style={styles.input}
+      />
+
+      <TextInput
+        placeholder="Short explanation"
+        value={description}
+        onChangeText={setDescription}
+        style={[styles.input, styles.textArea]}
+        multiline
       />
 
       <TouchableOpacity style={styles.button} onPress={handleAdd}>
-        <Text style={styles.buttonText}>Add</Text>
+        <Text style={styles.buttonText}>Add Learning</Text>
       </TouchableOpacity>
     </View>
   );
@@ -34,25 +53,28 @@ export default function Form({ onAdd }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 18,
+    marginBottom: 20,
   },
   input: {
-    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 13,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 12,
-    paddingHorizontal: 14,
+  },
+  textArea: {
+    height: 85,
+    textAlignVertical: "top",
   },
   button: {
-    backgroundColor: "#6b1e1e",
-    paddingHorizontal: 18,
-    justifyContent: "center",
-    borderRadius: 12,
+    backgroundColor: "#7A1F2B",
+    padding: 14,
+    borderRadius: 10,
+    alignItems: "center",
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "700",
+    fontWeight: "bold",
   },
 });

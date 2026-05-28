@@ -1,24 +1,24 @@
 import React from "react";
 import { FlatList, Text, StyleSheet } from "react-native";
+import EntryItem from "./item";
 import { Entry } from "./type";
-import Item from "./item";
-import { supabase } from "../../lib/supabase";
 
 type Props = {
   entries: Entry[];
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 };
 
-export default function List({ entries, onDelete }: Props) {
+export default function EntryList({ entries, onDelete }: Props) {
+  if (entries.length === 0) {
+    return <Text style={styles.empty}>No learnings added yet.</Text>;
+  }
+
   return (
     <FlatList
       data={entries}
-      keyExtractor={(item) => item.id}
-      ListEmptyComponent={
-        <Text style={styles.empty}>No lessons added yet.</Text>
-      }
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
-        <Item entry={item} onDelete={onDelete} />
+        <EntryItem entry={item} onDelete={onDelete} />
       )}
     />
   );
@@ -27,7 +27,7 @@ export default function List({ entries, onDelete }: Props) {
 const styles = StyleSheet.create({
   empty: {
     textAlign: "center",
-    color: "#999",
-    marginTop: 30,
+    color: "#777",
+    marginTop: 25,
   },
 });

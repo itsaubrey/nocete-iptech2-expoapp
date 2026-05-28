@@ -1,17 +1,18 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Entry } from "./type";
-import { supabase } from "../../lib/supabase";
 
 type Props = {
   entry: Entry;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 };
 
-export default function Item({ entry, onDelete }: Props) {
+export default function EntryItem({ entry, onDelete }: Props) {
   return (
     <View style={styles.card}>
-      <Text style={styles.text}>{entry.text}</Text>
+      <Text style={styles.title}>{entry.title}</Text>
+      <Text style={styles.description}>{entry.description}</Text>
+      <Text style={styles.date}>{entry.created_at}</Text>
 
       <TouchableOpacity onPress={() => onDelete(entry.id)}>
         <Text style={styles.delete}>Delete</Text>
@@ -22,21 +23,30 @@ export default function Item({ entry, onDelete }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "#eee",
   },
-  text: {
-    fontSize: 16,
+  title: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#7A1F2B",
+  },
+  description: {
+    marginTop: 5,
     color: "#333",
-    marginBottom: 8,
+  },
+  date: {
+    marginTop: 8,
+    fontSize: 12,
+    color: "#777",
   },
   delete: {
-    color: "#b00020",
-    fontWeight: "700",
-    alignSelf: "flex-end",
+    marginTop: 10,
+    color: "#B00020",
+    fontWeight: "bold",
   },
 });
